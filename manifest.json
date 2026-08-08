@@ -1,0 +1,78 @@
+{
+  "manifest_version": 3,
+  "name": "Gesturefy for Chrome",
+  "version": "1.3.0",
+  "description": "__MSG_extensionDescription__",
+  "author": "幻灭文学出版社",
+  "icons": {
+    "96": "resources/img/iconx96.png",
+    "48": "resources/img/iconx48.png",
+    "32": "resources/img/iconx32.png",
+    "128": "resources/img/iconx128.png"
+  },
+  "default_locale": "zh_CN",
+  "permissions": [
+    "storage",
+    "notifications",
+    "scripting"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "optional_permissions": [
+    "tabs",
+    "sessions",
+    "bookmarks",
+    "clipboardWrite",
+    "clipboardRead",
+    "downloads",
+    "search",
+    "browsingData"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "run_at": "document_start",
+      "match_about_blank": true,
+      "match_origin_as_fallback": true,
+      "all_frames": true,
+      "js": [
+        "core/bundle/content.bundle.js"
+      ],
+      "css": [
+        "core/views/mouse-gesture-view/mouse-gesture-view.css"
+      ]
+    }
+  ],
+  "background": {
+    "service_worker": "core/background.mjs",
+    "type": "module"
+  },
+  "options_ui": {
+    "page": "views/options/index.html",
+    "open_in_tab": true
+  },
+  "action": {
+    "default_icon": {
+      "96": "resources/img/iconx96.png",
+      "48": "resources/img/iconx48.png",
+      "32": "resources/img/iconx32.png"
+    },
+    "default_title": "__MSG_commandLabelOpenAddonSettings__"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "resources/fonts/NunitoSans-Regular.woff",
+        "core/views/popup-command-view/popup-command-view.html",
+        "resources/json/defaults.json"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ],
+  "homepage_url": "https://github.com/GenmetsuWenxuePress/gesturefy-chrome"
+}

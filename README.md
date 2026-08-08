@@ -1,60 +1,49 @@
-<p align="right">
- <a href="https://addons.mozilla.org/firefox/addon/gesturefy/reviews/"><img alt="User rating" src="https://img.shields.io/amo/stars/gesturefy.svg"></a>
- <a href="https://addons.mozilla.org/firefox/addon/gesturefy/statistics"><img alt="User count" src="https://img.shields.io/amo/users/gesturefy.svg"></a>
- <a href="https://github.com/Robbendebiene/Gesturefy/releases"><img alt="Latest release" src="https://img.shields.io/github/release/robbendebiene/gesturefy.svg"></a>
- <a href="https://crowdin.com/project/gesturefy"><img alt="Crowdin translation progress" src="https://badges.crowdin.net/gesturefy/localized.svg"></a>
- <a href="https://github.com/Robbendebiene/Gesturefy/blob/master/LICENSE"><img alt="License" src="https://img.shields.io/github/license/robbendebiene/gesturefy.svg"></a>
-</p>
+# Gesturefy for Chrome 🖱️
 
-# <sub><img alt="G" src="https://github.com/Robbendebiene/Gesturefy/blob/master/src/resources/img/iconx48.png" height="38" width="38"></sub>esturefy
+> **A Chrome port of [Gesturefy](https://github.com/Robbendebiene/Gesturefy)** ([GPL-3.0](LICENSE), by [Robbendebiene](https://github.com/Robbendebiene)) — a tribute to the original author.
+> The original Gesturefy is Firefox-only. This port brings the classic mouse gesture experience to Chrome users.
 
-#### [<img height="60" align="right" src="https://blog.mozilla.org/addons/files/2020/04/get-the-addon-fx-apr-2020.svg">](https://addons.mozilla.org/firefox/addon/gesturefy/) Navigate, operate, and browse faster with mouse gestures! A customizable Firefox mouse gesture add-on with a variety of different commands.
+Navigate, operate, and browse faster with mouse gestures! Draw gestures with your mouse (while holding the left/middle/right button) to execute commands — more natural and convenient than keyboard shortcuts.
 
-***
+**[中文版 README](README_CN.md)**
 
-Gesturefy is a pure mouse gesture extension, which means it's only suited for mice and not touchpads. "What's a mouse gesture?" you might ask yourself. Well, mouse gestures are like keyboard shortcuts, only for your mouse. Instead of pressing a bunch of keys, you simply move your mouse in a certain manner to execute commands and actions. Mouse gestures can be more natural and convenient than keyboard shortcuts and thus are also suitable for casual users. Wait, is that a mouse in your hand? Come and try it out :)
+## ✨ Features
 
-**If you want to support Gesturefy, please [visit this page](https://github.com/Robbendebiene/Gesturefy/wiki/FAQ#where-and-how-can-i-support-gesturefy)!**
+- 🖱️ Mouse gestures (triggered by holding left, middle, or right mouse button)
+- ⚡ 80+ built-in commands: tabs, navigation, scrolling, zoom, copy & paste, and more
+- 🎨 Customizable gesture trace and status information style
+- 🔄 Rocker gestures (left-click while holding right button and vice versa) & wheel gestures
+- 📜 Custom user script command (advanced)
+- 🌓 Light / Dark / High-contrast themes
+- 🌐 Multi-language support (Simplified Chinese / Traditional Chinese)
 
-## Features:
+## 📦 Installation
 
- - Mouse gestures (moving the mouse while holding the left, middle, or right button)
- - More than 80 different predefined commands
- - Provides special commands like popup, user script, multi purpose and cross add-on command
- - Customizable gesture trace and status information style
- - Rocker gestures (left-click while holding the right mouse button and vice versa)
- - Wheel gestures (scroll wheel while holding the left, middle, or right button)
- - Multilingual, thanks to volunteers on [Crowdin](https://crowdin.com/project/gesturefy)
- - Light, dark and highcontrast theme
+1. Download the zip from [Releases](https://github.com/GenmetsuWenxuePress/gesturefy-chrome/releases)
+2. Open `chrome://extensions` in Chrome → enable **Developer mode**
+3. Drag the zip onto the page, or click **Load unpacked** and select the extracted folder
 
-## Limitations:
+## 🔧 Build from source
 
- - Gesturefy does not work on Mozilla related pages like [addons.mozilla.org](https://addons.mozilla.org), internal pages like about:addons or other add-on option pages (e.g. moz-extension://*). This is because Firefox restricts add-ons from accessing these pages for security reasons.
- - The page must be partially loaded to perform gestures.
- - **MacOS Sierra:** Wheel gestures currently doesn't work (see this [bug](https://bugzilla.mozilla.org/show_bug.cgi?id=1424893))
+```bash
+# Requires Node.js 18+
+npm install -g rollup
+rollup -c rollup.config.mjs   # Regenerates core/bundle/content.bundle.js
+```
 
-## Permissions explained:
+Then load the directory as an unpacked extension.
 
- - Access your data for all websites: *This is a key permission, because the complete gesture functionality is injected in every webpage you visit (which means a part of the code is running in each tab). This is necessary, because with the new API there is no other way to track your mouse movement or draw anything on the screen. It's also needed to perform page specific commands like scroll down or up.*
- - Read and modify browser settings: *This is required to change the context menu behaviour for MacOS and Linux users to support the usage of the right mouse button.*
- - Display notifications: *This is used to show a notification on Gesturefy updates or to display certain error messages.*
+## 📜 License & Credits
 
+This project is a port of [Gesturefy](https://github.com/Robbendebiene/Gesturefy) (GPL-3.0), released under the **GPL-3.0 license** with all original copyright notices preserved. See [LICENSE](LICENSE) and [NOTICE.md](NOTICE.md) for details.
 
-***
+- Original project: https://github.com/Robbendebiene/Gesturefy
+- Original (Firefox): https://addons.mozilla.org/firefox/addon/gesturefy/
 
-## Release History:
+## 🔐 Privacy
 
-See the [releases page](https://github.com/Robbendebiene/Gesturefy/releases) for a history of releases and highlights for each release.
+This extension collects **no data of any kind** — no remote servers, no analytics, no telemetry (same as the original). See the [Privacy Policy](https://genmetsuwenxuepress.github.io/gesturefy-chrome/PRIVACY.html) for details.
 
-## License:
+---
 
-This project is licensed under the terms of the [GNU General Public License v3.0](https://github.com/Robbendebiene/Gesturefy/blob/master/LICENSE).
-
-## Privacy:
-
-Gesturefy does not collect any data of any kind.
-
-* Gesturefy has no home server.
-* Gesturefy doesn't embed any analytic or telemetry hooks in its code.
-
-**GitHub** is used to host the Gesturefy project. **GitHub, Inc.** (a subsidiary of **Microsoft Corporation**) owns **GitHub** and is unrelated to Gesturefy.
+*Gesturefy for Chrome — A Chrome port of the Firefox mouse gesture extension Gesturefy (GPL-3.0, by Robbendebiene). Tribute to the original author.*

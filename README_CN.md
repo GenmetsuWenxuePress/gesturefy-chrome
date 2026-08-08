@@ -1,0 +1,47 @@
+# Gesturefy for Chrome 🖱️
+
+> **Gesturefy**（[GPL-3.0](LICENSE)，原作者 [Robbendebiene](https://github.com/Robbendebiene)）的 **Chrome 移植版**，向原作者致敬。
+> 原版仅支持 Firefox，本移植版让 Chrome 用户也能体验 Gesturefy 的经典鼠标手势。
+
+**[English README](README.md)**
+
+Navigate, operate, and browse faster with mouse gestures! 鼠标手势：按住左/中/右键划动即可执行命令，比快捷键更自然。
+
+## ✨ 功能
+
+- 🖱️ 鼠标手势（左/中/右键触发）
+- ⚡ 80+ 预置命令：标签页、导航、滚动、缩放、复制粘贴等
+- 🎨 可自定义手势轨迹与状态信息样式
+- 🔄 Rocker 手势（左右键组合）与滚轮手势
+- 📜 自定义用户脚本命令（高级）
+- 🌓 亮色 / 暗色 / 高对比度主题
+- 🌐 多语言（简体中文 / 繁体中文）
+
+## 📦 安装
+
+1. 下载 [Releases](https://github.com/GenmetsuWenxuePress/gesturefy-chrome/releases) 中的 zip
+2. Chrome 打开 `chrome://extensions` → 开启「开发者模式」
+3. 拖入 zip 或「加载已解压的扩展程序」
+
+## 🔧 从源码构建
+
+```bash
+# 需要 Node.js 18+
+npm install -g rollup
+rollup -c rollup.config.mjs   # 重新生成 core/bundle/content.bundle.js
+```
+
+然后加载整个目录即可。
+
+## 📜 许可证与致谢
+
+本项目基于 [Gesturefy](https://github.com/Robbendebiene/Gesturefy)（GPL-3.0）移植，**以 GPL-3.0 许可证发布**，保留原作者全部版权声明。详见 [LICENSE](LICENSE) 与 [NOTICE.md](NOTICE.md)。
+
+- 原项目：https://github.com/Robbendebiene/Gesturefy
+- 原版（Firefox）：https://addons.mozilla.org/firefox/addon/gesturefy/
+
+**隐私**：本扩展不收集任何数据，无远程服务器，无统计埋点（与原版一致）。详见[隐私政策](https://genmetsuwenxuepress.github.io/gesturefy-chrome/PRIVACY.html)。
+
+---
+
+*Gesturefy for Chrome — A Chrome port of the Firefox mouse gesture extension Gesturefy (GPL-3.0, by Robbendebiene). Tribute to the original author.*
