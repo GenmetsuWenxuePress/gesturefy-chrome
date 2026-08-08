@@ -13,12 +13,13 @@ Navigate, operate, and browse faster with mouse gestures! Draw gestures with you
 - ⚡ 80+ built-in commands: tabs, navigation, scrolling, zoom, copy & paste, and more
 - 🎬 **SaveMedia** — save video / audio elements from the page
 - 🖱️👆 **Double-click to close tab** (optional, left/right button configurable)
-- 🔄 **Gesture presets** — one-click migration for Edge / 360 browser users
+- 🔄 **Edge gesture presets** — Microsoft Edge's official 16-gesture map
+  (hand-recorded), one-click migration for Edge users
 - 🎨 Customizable gesture trace and status information style
 - 🔄 Rocker gestures (left-click while holding right button and vice versa) & wheel gestures
 - 📜 Custom user script command (advanced)
 - 🌓 Light / Dark / High-contrast themes
-- 🌐 Multi-language support (Simplified Chinese / Traditional Chinese)
+- 🌐 Multi-language support (English / Simplified Chinese / Traditional Chinese)
 
 ## 🧩 Modular architecture
 
