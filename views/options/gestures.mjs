@@ -38,21 +38,41 @@ function main (values) {
   const gestureSearchInput = document.getElementById("gestureSearchInput");
         gestureSearchInput.oninput = onSearchInput;
         gestureSearchInput.placeholder = chrome.i18n.getMessage('gestureSearchPlaceholder');
-  // create and add all existing gesture items
-  const fragment = document.createDocumentFragment();
-  for (let gestureJSON of Config.get("Gestures")) {
-    const gesture = new Gesture(gestureJSON);
-    const gestureListItem = createGestureListItem(gesture);
-    // use the reference to the gestureItem as the Map key to the gesture object
-    Gestures.set(gestureListItem, gesture);
-    fragment.prepend(gestureListItem);
-  }
-  const gestureList = document.getElementById("gestureContainer");
-        gestureList.appendChild(fragment);
-        gestureList.dataset.noResultsHint = chrome.i18n.getMessage('gestureHintNoSearchResults');
+  // render all existing gesture items
+  renderGestures();
   // add mouse gesture controller event listeners
   mouseGestureControllerSetup();
 }
+
+
+/**
+ * Renders or re-renders the gesture list items in the UI from current Config
+ **/
+export function renderGestures () {
+  const gestureList = document.getElementById("gestureContainer");
+  if (!gestureList) return;
+
+  // clear existing items from Gestures Map and DOM except gestureAddButton (first child)
+  Gestures.clear();
+  while (gestureList.children.length > 1) {
+    gestureList.removeChild(gestureList.lastChild);
+  }
+
+  const fragment = document.createDocumentFragment();
+  const gesturesData = Config.get("Gestures") || [];
+  for (let gestureJSON of gesturesData) {
+    const gesture = new Gesture(gestureJSON);
+    const gestureListItem = createGestureListItem(gesture);
+    Gestures.set(gestureListItem, gesture);
+    fragment.prepend(gestureListItem);
+  }
+  gestureList.appendChild(fragment);
+  gestureList.dataset.noResultsHint = chrome.i18n.getMessage('gestureHintNoSearchResults');
+
+  const searchQuery = document.getElementById("gestureSearchInput")?.value;
+  if (searchQuery) onSearchInput();
+}
+
 
 
 /**

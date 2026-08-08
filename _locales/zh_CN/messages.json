@@ -1680,5 +1680,45 @@
   "welcomePageLowerSectionLearnMoreLink": {
     "message": "了解更多",
     "description": "Learn More"
+  },
+  "commandLabelSaveMedia": {
+    "message": "保存媒体",
+    "description": "Save media"
+  },
+  "commandDescriptionSaveMedia": {
+    "message": "下载手势起始点的视频或音频元素。",
+    "description": "Downloads the video or audio element on which the gesture started."
+  },
+  "settingLabelDoubleClickCloseTab": {
+    "message": "双击关闭标签页",
+    "description": "Double click to close tab"
+  },
+  "settingDescriptionDoubleClickCloseTab": {
+    "message": "在页面空白处双击鼠标关闭当前标签页。",
+    "description": "Double click on empty area to close the current tab."
+  },
+  "settingLabelPresets": {
+    "message": "手势预设",
+    "description": "Gesture presets"
+  },
+  "settingDescriptionPresets": {
+    "message": "选择并应用预设的手势配置。",
+    "description": "Select and apply a preset gesture configuration."
+  },
+  "presetApplyButton": {
+    "message": "应用预设",
+    "description": "Apply preset"
+  },
+  "presetGesturefy": {
+    "message": "Gesturefy 默认",
+    "description": "Gesturefy default"
+  },
+  "presetEdge": {
+    "message": "微软 Edge 风格",
+    "description": "Microsoft Edge style"
+  },
+  "presetQihu360": {
+    "message": "360 安全浏览器风格",
+    "description": "360 Safe Browser style"
   }
 }

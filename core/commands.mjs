@@ -1913,6 +1913,76 @@ export async function SaveImage (sender, data) {
 }
 
 
+export async function SaveMedia (sender, data) {
+  const nodeName = data.target.nodeName?.toLowerCase();
+  const mediaSrc = data.target.currentSrc ?? data.target.src;
+
+  if ((nodeName === "video" || nodeName === "audio") && mediaSrc && isURL(mediaSrc)) {
+    const queryOptions = {
+      saveAs: this.getSetting("promptDialog"),
+      // download in incognito window if currently in incognito mode
+      incognito: sender.tab.incognito
+    };
+
+    const mediaURLObject = new URL(mediaSrc);
+    // if data url create blob
+    if (mediaURLObject.protocol === "data:") {
+      queryOptions.url = URL.createObjectURL(dataURItoBlob(mediaSrc));
+      // get file extension from mime type
+      const mimeType = mediaSrc.split("data:").pop().split(";")[0];
+      const fileExtension = mimeType.includes("/") ? mimeType.split("/").pop() : mimeType;
+      // construct file name
+      queryOptions.filename = data.target.alt || data.target.title || nodeName;
+      // remove special characters and add file extension
+      queryOptions.filename = sanitizeFilename(queryOptions.filename) + "." + fileExtension;
+    }
+    // otherwise use normal url
+    else queryOptions.url = mediaSrc;
+
+    // add referer header, because some websites modify the media if the referer is missing
+    // get referrer from content script
+    const _res3 = await chrome.scripting.executeScript({
+      target: { tabId: sender.tab.id, frameIds: [sender.frameId ?? 0] },
+      func: () => ({ referrer: document.referrer, url: window.location.href })
+    });
+    const documentValues = _res3[0]?.result;
+
+    if (documentValues) {
+      // if the media is embedded in a website use the url of that website as the referer
+      if (mediaSrc !== documentValues.url) {
+        // emulate no-referrer-when-downgrade
+        // The origin, path, and querystring of the URL are sent as a referrer when the protocol security level stays the same (HTTP→HTTP, HTTPS→HTTPS)
+        // or improves (HTTP→HTTPS), but isn't sent to less secure destinations (HTTPS→HTTP).
+        if (!(new URL(documentValues.url).protocol === "https:" && mediaURLObject.protocol === "http:")) {
+          queryOptions.headers = [ { name: "Referer", value: documentValues.url.split("#")[0] } ];
+        }
+      }
+      // if the media is not embedded, but a referrer is set use the referrer
+      else if (documentValues.referrer) {
+        queryOptions.headers = [ { name: "Referer", value: documentValues.referrer } ];
+      }
+    }
+
+    // download media
+    const downloadId = await chrome.downloads.download(queryOptions);
+
+    // if data url then assume a blob file was created and clear its url
+    if (mediaURLObject.protocol === "data:") {
+      // catch error and free the blob for gc
+      if (chrome.runtime.lastError) URL.revokeObjectURL(queryOptions.url);
+      else chrome.downloads.onChanged.addListener(function clearURL(downloadDelta) {
+        if (downloadId === downloadDelta.id && downloadDelta.state.current === "complete") {
+          URL.revokeObjectURL(queryOptions.url);
+          chrome.downloads.onChanged.removeListener(clearURL);
+        }
+      });
+    }
+    // confirm success
+    return true;
+  }
+}
+
+
 export async function SaveLink (sender, data) {
   let url = null;
   // only allow http/https urls to open from text selection to better mimic Firefox's behaviour

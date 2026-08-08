@@ -60,6 +60,13 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
     "wheelDown":              handleSpecialGestureCommandExecution,
     "getExtensionContextInfo": (message, sender, sendResponse) => {
       sendResponse({ tabId: sender.tab.id, frameId: sender.frameId });
+    },
+    "closeTabByDoubleClick": (message, sender, sendResponse) => {
+      if (sender.tab?.id) {
+        chrome.tabs.remove(sender.tab.id);
+        sendResponse(true);
+      }
+      else sendResponse(false);
     }
   }
   // call subject corresponding message handler if existing

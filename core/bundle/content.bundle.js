@@ -2532,6 +2532,25 @@ function handleRockerAndWheelEvents (subject, event) {
 }
 
 
+// define double click to close tab event listener
+let lastDoubleClickTime = 0;
+
+document.addEventListener("dblclick", (event) => {
+  if (!Config.get("Settings.Gesture.doubleClickCloseTab")) return;
+  if (Config.get("Exclusions")?.some(matchesCurrentURL)) return;
+
+  const now = Date.now();
+  if (now - lastDoubleClickTime < 300) return;
+  lastDoubleClickTime = now;
+
+  const target = event.composedPath?.()[0] ?? event.target;
+  const element = target instanceof Element ? target : target?.parentElement;
+  if (element?.closest("input, textarea, select, button, a, iframe, video, audio, [contenteditable]")) return;
+
+  chrome.runtime.sendMessage({ subject: "closeTabByDoubleClick" });
+});
+
+
 /**
  * Main function
  * Applies the user config to the particular controller or interface

@@ -505,6 +505,16 @@
     "group": "image"
   },
   {
+    "command": "SaveMedia",
+    "settings": {
+      "promptDialog": true
+    },
+    "permissions": [
+      "downloads"
+    ],
+    "group": "media"
+  },
+  {
     "command": "SaveLink",
     "settings": {
       "promptDialog": true
