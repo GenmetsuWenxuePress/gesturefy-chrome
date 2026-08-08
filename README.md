@@ -11,7 +11,6 @@ Navigate, operate, and browse faster with mouse gestures! Draw gestures with you
 
 - 🖱️ Mouse gestures (triggered by holding left, middle, or right mouse button)
 - ⚡ 80+ built-in commands: tabs, navigation, scrolling, zoom, copy & paste, and more
-- 🎬 **SaveMedia** — save video / audio elements from the page
 - 🖱️👆 **Double-click to close tab** (optional, left/right button configurable)
 - 🔄 **Edge gesture presets** — Microsoft Edge's official 16-gesture map
   (hand-recorded), one-click migration for Edge users
