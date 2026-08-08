@@ -58,11 +58,14 @@ function renderGestureList () {
     if (child !== addButtonItem) child.remove();
   }
   Gestures.clear();
+  // determine thumbnail style from the active preset (edge preset -> Edge icons)
+  const activePreset = Config.get("Settings.Gesture.activePreset");
+  const thumbnailStyle = activePreset === "edge" ? "edge" : "curve";
   // create and add all existing gesture items
   const fragment = document.createDocumentFragment();
   for (let gestureJSON of Config.get("Gestures")) {
     const gesture = new Gesture(gestureJSON);
-    const gestureListItem = createGestureListItem(gesture);
+    const gestureListItem = createGestureListItem(gesture, thumbnailStyle);
     // use the reference to the gestureItem as the Map key to the gesture object
     Gestures.set(gestureListItem, gesture);
     fragment.prepend(gestureListItem);
@@ -133,9 +136,26 @@ function createCatmullRomSVGPath(points, alpha = 0.5) {
 
 
 /**
- * Creates and returns a svg element of a given gesture pattern
+ * Creates and returns a sharp right-angle svg path element from given points
+ * (matches Microsoft Edge's native gesture icon style)
  **/
-function createGestureThumbnail (pattern) {
+function createEdgeStyleSVGPath(points) {
+  let path = `M${points[0].x},${points[0].y}`;
+  for (let i = 1; i < points.length; i++) {
+    path += ` L${points[i].x},${points[i].y}`;
+  }
+  const pathElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        pathElement.setAttribute("d", path);
+
+  return pathElement;
+}
+
+/**
+ * Creates and returns a svg element of a given gesture pattern
+ * style "edge" renders sharp right-angle segments (matching Microsoft Edge's
+ * native gesture icons), default "curve" renders Gesturefy's smooth trail
+ **/
+function createGestureThumbnail (pattern, style = "curve") {
   const viewBoxWidth = 100;
   const viewBoxHeight = 100;
 
@@ -154,7 +174,9 @@ function createGestureThumbnail (pattern) {
   const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
 
   // create gesture trail as svg path element
-  const gesturePathElement = createCatmullRomSVGPath(points);
+  const gesturePathElement = style === "edge"
+    ? createEdgeStyleSVGPath(points)
+    : createCatmullRomSVGPath(points);
   gesturePathElement.classList.add("gl-thumbnail-trail");
 
   // create arrow as svg path element
@@ -162,6 +184,16 @@ function createGestureThumbnail (pattern) {
   arrowPathElement.setAttribute("d", `M0,-7 L14,0 L0,7 z`);
   arrowPathElement.classList.add("gl-thumbnail-arrow");
   arrowPathElement.style.setProperty("offset-path", `path('${gesturePathElement.getAttribute("d")}')`);
+
+  // edge style adds a start dot, matching Microsoft Edge's gesture icons
+  if (style === "edge") {
+    const startDot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    startDot.setAttribute("cx", points[0].x);
+    startDot.setAttribute("cy", points[0].y);
+    startDot.setAttribute("r", 3.5);
+    startDot.classList.add("gl-thumbnail-startdot");
+    group.append(startDot);
+  }
 
   group.append(gesturePathElement, arrowPathElement);
 
@@ -201,13 +233,13 @@ function createGestureThumbnail (pattern) {
 /**
  * Creates a gesture list item html element by a given gestureObject and returns it
  **/
-function createGestureListItem (gesture) {
+function createGestureListItem (gesture, style = "curve") {
   const gestureListItem = document.createElement("li");
         gestureListItem.classList.add("gl-item");
         gestureListItem.onclick = onItemClick;
         gestureListItem.onpointerenter = onItemPointerenter;
         gestureListItem.onpointerleave = onItemPointerleave;
-  const gestureThumbnail = createGestureThumbnail( gesture.getPattern() );
+  const gestureThumbnail = createGestureThumbnail( gesture.getPattern(), style );
         gestureThumbnail.classList.add("gl-thumbnail");
   const commandField = document.createElement("div");
         commandField.classList.add("gl-command");

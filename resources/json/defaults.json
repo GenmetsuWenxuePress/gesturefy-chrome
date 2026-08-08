@@ -28,7 +28,8 @@
           "horizontalPosition": 50,
           "verticalPosition": 40
         }
-      }
+      },
+      "activePreset": "gesturefy"
     },
     "Rocker": {
       "active": false,
