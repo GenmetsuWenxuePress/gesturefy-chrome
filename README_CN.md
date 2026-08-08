@@ -11,7 +11,6 @@ Navigate, operate, and browse faster with mouse gestures! 鼠标手势：按住�
 
 - 🖱️ 鼠标手势（按住左/中/右键绘制手势触发命令）
 - ⚡ 80+ 内置命令：标签页、导航、滚动、缩放、复制粘贴等
-- 🎬 **SaveMedia**：保存页面中的视频 / 音频元素
 - 🖱️👆 **双击关闭标签页**（可选开关，支持左键/右键）
 - 🔄 **Edge 手势预设**：Microsoft Edge 官方 16 种手势（手绘录制），Edge 用户一键迁移
 - 🎨 可自定义手势轨迹与状态信息样式
