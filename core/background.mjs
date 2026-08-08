@@ -46,31 +46,35 @@ function updateVariablesOnConfigChange () {
  * on gesture end, execute command
  * special gesture: execute related command
  **/
-chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
-  await Config.loaded;
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  // MV3 SW 唤醒竞态防护：等待配置加载后再处理手势消息。
+  // 注意：不能把 listener 写成 async——Chrome 只接受字面量 true 表示异步响应，
+  // async 函数返回 Promise 会导致 sendResponse 被丢弃、手势完全失效。
+  Config.loaded.then(() => {
+    // message subject to handler mapping
+    const messageHandler = {
+      "gestureChange":          handleMouseGestureCommandResponse,
+      "gestureEnd":             handleMouseGestureCommandExecution,
 
-  // message subject to handler mapping
-  const messageHandler = {
-    "gestureChange":          handleMouseGestureCommandResponse,
-    "gestureEnd":             handleMouseGestureCommandExecution,
-
-    "rockerLeft":             handleSpecialGestureCommandExecution,
-    "rockerRight":            handleSpecialGestureCommandExecution,
-    "wheelUp":                handleSpecialGestureCommandExecution,
-    "wheelDown":              handleSpecialGestureCommandExecution,
-    "getExtensionContextInfo": (message, sender, sendResponse) => {
-      sendResponse({ tabId: sender.tab.id, frameId: sender.frameId });
-    },
-    "closeTabByDoubleClick": (message, sender, sendResponse) => {
-      if (sender.tab?.id) {
-        chrome.tabs.remove(sender.tab.id);
-        sendResponse(true);
+      "rockerLeft":             handleSpecialGestureCommandExecution,
+      "rockerRight":            handleSpecialGestureCommandExecution,
+      "wheelUp":                handleSpecialGestureCommandExecution,
+      "wheelDown":              handleSpecialGestureCommandExecution,
+      "getExtensionContextInfo": (message, sender, sendResponse) => {
+        sendResponse({ tabId: sender.tab.id, frameId: sender.frameId });
+      },
+      "closeTabByDoubleClick": (message, sender, sendResponse) => {
+        if (sender.tab?.id) {
+          chrome.tabs.remove(sender.tab.id);
+          sendResponse(true);
+        }
+        else sendResponse(false);
       }
-      else sendResponse(false);
     }
-  }
-  // call subject corresponding message handler if existing
-  if (message.subject in messageHandler) messageHandler[message.subject](message, sender, sendResponse);
+    // call subject corresponding message handler if existing
+    if (message.subject in messageHandler) messageHandler[message.subject](message, sender, sendResponse);
+  });
+  return true; // 同步返回 true：表示将异步调用 sendResponse
 });
 
 
@@ -148,11 +152,22 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.subject === "backgroundScriptAPICall") {
     try {
       // call a background script api function by its given namespace, function name and parameters.
-      // return the function promise so the message sender receives its value on resolve
-      return chrome[message.data.nameSpace][message.data.functionName](...message.data.parameter);
+      // Chrome 不认 Promise 返回值（只认 true），必须手动 then + sendResponse
+      const result = chrome[message.data.nameSpace][message.data.functionName](...message.data.parameter);
+      if (result && typeof result.then === "function") {
+        result.then(
+          (value) => sendResponse(value),
+          (error) => sendResponse({ error: String(error) })
+        );
+      }
+      else {
+        sendResponse(result);
+      }
+      return true;
     }
     catch (error) {
       console.warn("Unsupported call to background script API.", error);
+      sendResponse({ error: String(error) });
     }
   }
 });

@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Gesturefy for Chrome",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "__MSG_extensionDescription__",
   "author": "幻灭文学出版社",
   "icons": {
