@@ -4,12 +4,24 @@
     "description": "Navigate, operate, and browse faster with mouse gestures! A customizable mouse gesture add-on with a variety of different commands."
   },
   "addonUpdateNotificationTitle": {
-    "message": "Gesturefy add-on has been updated!",
-    "description": "Gesturefy add-on has been updated!"
+    "message": "$NAME$ has been updated!",
+    "description": "Gesturefy add-on has been updated!",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Gesturefy"
+      }
+    }
   },
   "addonUpdateNotificationMessage": {
     "message": "The new version number is $VERSION$. Click here to view the changelog.",
-    "description": "The new version number is $VERSION$. Click here to view the changelog."
+    "description": "The new version number is $VERSION$. Click here to view the changelog.",
+    "placeholders": {
+      "version": {
+        "content": "$1",
+        "example": "1.0.1"
+      }
+    }
   },
   "navigationSettings": {
     "message": "Settings",
@@ -1436,8 +1448,14 @@
     "description": "A custom selection of multiple commands."
   },
   "commandErrorNotificationTitle": {
-    "message": "\"New tab\" command failed.",
-    "description": "\"New tab\" command failed."
+    "message": "\"$COMMAND$\" command failed.",
+    "description": "\"New tab\" command failed.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "New tab"
+      }
+    }
   },
   "commandErrorNotificationMessageIllegalURL": {
     "message": "The target URL cannot be opened. Click here for more information.",
@@ -1496,8 +1514,14 @@
     "description": "Edit Gesture"
   },
   "gesturePopupRecordingAreaText": {
-    "message": "Use the right mouse button to record a new gesture.",
-    "description": "Use the right mouse button to record a new gesture."
+    "message": "Use the $MOUSEBUTTON$ button to record a new gesture.",
+    "description": "Use the right mouse button to record a new gesture.",
+    "placeholders": {
+      "mousebutton": {
+        "content": "$1",
+        "example": "right"
+      }
+    }
   },
   "gesturePopupMouseButtonLeft": {
     "message": "left",
@@ -1537,7 +1561,13 @@
   },
   "gesturePopupNotificationSimilarGesture": {
     "message": "This gesture is similar to the \"$GESTURE_NAME$\" gesture.",
-    "description": "This gesture is similar to the \"$GESTURE_NAME$\" gesture."
+    "description": "This gesture is similar to the \"$GESTURE_NAME$\" gesture.",
+    "placeholders": {
+      "gesture_name": {
+        "content": "$1",
+        "example": "New Tab"
+      }
+    }
   },
   "permissionLabelTabs": {
     "message": "Tabs",
