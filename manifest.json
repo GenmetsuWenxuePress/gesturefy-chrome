@@ -11,7 +11,7 @@
     "32": "resources/img/iconx32.png",
     "128": "resources/img/iconx128.png"
   },
-  "default_locale": "zh_CN",
+  "default_locale": "en",
   "permissions": [
     "storage",
     "notifications",

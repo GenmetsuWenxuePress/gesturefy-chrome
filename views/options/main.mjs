@@ -67,6 +67,8 @@ function main () {
       const key = presetSelect.value;
       if (presets && presets[key]) {
         await Config.set("Gestures", presets[key]);
+        // notify gestures.mjs to re-render the gesture list
+        window.dispatchEvent(new CustomEvent("gesturePresetApplied"));
         if (resetTimeout) clearTimeout(resetTimeout);
         presetApplyButton.textContent = "✓";
         resetTimeout = setTimeout(() => {

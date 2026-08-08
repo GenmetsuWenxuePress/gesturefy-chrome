@@ -38,6 +38,26 @@ function main (values) {
   const gestureSearchInput = document.getElementById("gestureSearchInput");
         gestureSearchInput.oninput = onSearchInput;
         gestureSearchInput.placeholder = chrome.i18n.getMessage('gestureSearchPlaceholder');
+  // render the gesture list
+  renderGestureList();
+  // re-render the gesture list when a preset was applied (event fired by main.mjs)
+  window.addEventListener("gesturePresetApplied", renderGestureList);
+  // add mouse gesture controller event listeners
+  mouseGestureControllerSetup();
+}
+
+/**
+ * Renders all gestures from the config into the gesture list ui
+ * Can be re-invoked to refresh the list after config changes (e.g. preset applied)
+ **/
+function renderGestureList () {
+  const gestureList = document.getElementById("gestureContainer");
+  // remove all existing gesture list items (keep the "new gesture" button)
+  const addButtonItem = gestureList.firstElementChild;
+  for (const child of Array.from(gestureList.children)) {
+    if (child !== addButtonItem) child.remove();
+  }
+  Gestures.clear();
   // create and add all existing gesture items
   const fragment = document.createDocumentFragment();
   for (let gestureJSON of Config.get("Gestures")) {
@@ -47,11 +67,8 @@ function main (values) {
     Gestures.set(gestureListItem, gesture);
     fragment.prepend(gestureListItem);
   }
-  const gestureList = document.getElementById("gestureContainer");
-        gestureList.appendChild(fragment);
-        gestureList.dataset.noResultsHint = chrome.i18n.getMessage('gestureHintNoSearchResults');
-  // add mouse gesture controller event listeners
-  mouseGestureControllerSetup();
+  gestureList.insertBefore(fragment, addButtonItem.nextSibling);
+  gestureList.dataset.noResultsHint = chrome.i18n.getMessage('gestureHintNoSearchResults');
 }
 
 
