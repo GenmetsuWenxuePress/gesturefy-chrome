@@ -1,9 +1,10 @@
 {
   "manifest_version": 3,
   "name": "Gesturefy for Chrome",
-  "version": "1.4.1",
+  "version": "1.4.0",
   "description": "__MSG_extensionDescription__",
   "author": "幻灭文学出版社",
+  "homepage_url": "https://github.com/GenmetsuWenxuePress/gesturefy-chrome",
   "icons": {
     "96": "resources/img/iconx96.png",
     "48": "resources/img/iconx48.png",
@@ -39,7 +40,8 @@
       "match_origin_as_fallback": true,
       "all_frames": true,
       "js": [
-        "core/bundle/content.bundle.js"
+        "core/bundle/content.bundle.js",
+        "core/extras/dblclick-close.mjs"
       ],
       "css": [
         "core/views/mouse-gesture-view/mouse-gesture-view.css"
@@ -73,6 +75,5 @@
         "<all_urls>"
       ]
     }
-  ],
-  "homepage_url": "https://github.com/GenmetsuWenxuePress/gesturefy-chrome"
+  ]
 }

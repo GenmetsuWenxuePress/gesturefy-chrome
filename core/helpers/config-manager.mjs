@@ -29,7 +29,7 @@ export default class ConfigManager {
     const fetchResources = [ chrome.storage[this._storageArea].get() ];
     if (typeof defaultsURL === "string") {
       const defaultsObject = new Promise((resolve, reject) => {
-        fetch(defaultsURL)
+        fetch(defaultsURL, {mode:'same-origin'})
           .then(res => res.json())
           .then(obj => resolve(obj), err => reject(err));
        });

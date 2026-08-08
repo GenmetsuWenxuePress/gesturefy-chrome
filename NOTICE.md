@@ -20,14 +20,17 @@
 
 1. Manifest V2 → V3 迁移（`browser_action` → `action`，background page → service worker）
 2. `browser.*` API → `chrome.*` API（移除 webextension-polyfill 依赖）
-3. Content script 由 rollup 打包为 `content.bundle.js`（Chrome 不支持 content script 中的 ES module）
-4. `browser.tabs.executeScript` → `chrome.scripting.executeScript`（13 处命令迁移）
-5. 剪贴板命令修复：MV3 Service Worker 无 Document Focus，改为注入页面执行
-6. Service Worker 唤醒竞态修复（等待配置加载完成后再处理手势）
-7. 用户脚本功能重写：`cloneInto`/`wrappedJSObject`（Firefox 专有）→ `chrome.scripting.executeScript` MAIN world + API 桥
-8. 通知点击监听改为顶层注册（MV3 事件监听要求）
-9. 清理 Firefox 专有 API（`mozInnerScreenX` 等）与历史遗留
-10. 语言精简为简体中文/繁体中文
+3. Content script 打包为 `content.bundle.js`（Chrome 不支持 content script 中的 ES module）；
+   该 bundle 为手工修复版本，作为**冻结内核**不再重新打包
+4. 新增**模块化扩展目录** `core/extras/`：新功能以独立 content script 模块挂载，
+   不修改冻结内核（当前模块：双击关闭标签页）
+5. 新增 **SaveMedia** 命令（保存页面视频/音频元素）
+6. 新增**手势预设**：Edge 风格 / 360 风格 / 原版风格一键切换
+7. 新增**双击关闭标签页**功能（设置页开关，默认关闭）
+8. 后台消息协议扩展：`getConfigValue` / `closeTabByDoubleClick`
+   （保持同步响应模式，兼容 Chrome MV3 onMessage 语义）
+9. 清理 Firefox 专有 API 残留，语言精简为简体中文/繁体中文
+10. 移除 `migrate.js`（一次性迁移工具）等非运行时文件
 
 ## 致谢
 
@@ -36,6 +39,7 @@
 
 - 原项目：https://github.com/Robbendebiene/Gesturefy
 - 原版下载：https://addons.mozilla.org/firefox/addon/gesturefy/
+- 本移植版：https://github.com/GenmetsuWenxuePress/gesturefy-chrome
 
 ---
 

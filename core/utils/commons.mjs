@@ -198,20 +198,6 @@ export function dataURItoBlob (dataURI) {
 }
 
 
-const notificationLinks = new Map();
-
-chrome.notifications?.onClicked?.addListener((notificationId) => {
-  const link = notificationLinks.get(notificationId);
-  if (link) {
-    notificationLinks.delete(notificationId);
-    chrome.tabs.create({
-      url: link,
-      active: true
-    });
-  }
-});
-
-
 /**
  * displays a browser notification
  * opens an URL on click if specified
@@ -225,9 +211,17 @@ export function displayNotification (title, message, link) {
     "message": message
   });
   createNotification.then((notificationId) => {
-    if (link) {
-      notificationLinks.set(notificationId, link);
-    }
+    // if an URL is specified register an onclick listener
+    if (link) chrome.notifications.onClicked.addListener(function handleNotificationClick (id) {
+      if (id === notificationId) {
+        chrome.tabs.create({
+          url: link,
+          active: true
+        });
+        // remove event listener
+        chrome.notifications.onClicked.removeListener(handleNotificationClick);
+      }
+    });
   });
 }
 

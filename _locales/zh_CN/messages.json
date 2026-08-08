@@ -1682,7 +1682,7 @@
     "description": "Learn More"
   },
   "commandLabelSaveMedia": {
-    "message": "保存媒体",
+    "message": "保存音视频",
     "description": "Save media"
   },
   "commandDescriptionSaveMedia": {
@@ -1694,16 +1694,16 @@
     "description": "Double click to close tab"
   },
   "settingDescriptionDoubleClickCloseTab": {
-    "message": "在页面空白处双击鼠标关闭当前标签页。",
-    "description": "Double click on empty area to close the current tab."
+    "message": "在网页空白处双击左键关闭当前标签页。",
+    "description": "Double click left mouse button on page to close current tab."
   },
   "settingLabelPresets": {
     "message": "手势预设",
     "description": "Gesture presets"
   },
   "settingDescriptionPresets": {
-    "message": "选择并应用预设的手势配置。",
-    "description": "Select and apply a preset gesture configuration."
+    "message": "选择预设的手势方案，应用后将替换当前手势列表。",
+    "description": "Select a preset gesture configuration, applying will replace the current gestures."
   },
   "presetApplyButton": {
     "message": "应用预设",
@@ -1714,11 +1714,20 @@
     "description": "Gesturefy default"
   },
   "presetEdge": {
-    "message": "微软 Edge 风格",
-    "description": "Microsoft Edge style"
+    "message": "Edge 风格",
+    "description": "Edge style"
   },
   "presetQihu360": {
-    "message": "360 安全浏览器风格",
-    "description": "360 Safe Browser style"
+    "message": "360 极速浏览器风格",
+    "description": "360 Browser style"
+  },
+  "aboutTributeTitle": {
+    "message": "向原作者致敬"
+  },
+  "aboutTributeBody": {
+    "message": "本扩展是 Gesturefy（GPL-3.0，原作者 Robbendebiene）的 Chrome 移植版。Gesturefy 是 Firefox 上备受喜爱的鼠标手势扩展，感谢原作者的卓越工作。本移植版保留了原作者的版权声明与 GPL-3.0 许可证，不收集任何数据。"
+  },
+  "aboutTributeLink": {
+    "message": "查看本移植版源码（GitHub）"
   }
 }

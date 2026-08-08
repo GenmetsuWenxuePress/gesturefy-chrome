@@ -50,9 +50,9 @@ export default class GestureContextData {
         : null,
       mouse: new MouseData({
         endpoint: {
-          // 坐标相对当前 frame 视口的 CSS 像素，手势视图 fixed 定位在同一 frame 内，无需额外转换
-          x: event.clientX,
-          y: event.clientY
+          // transform coordinates to css screen coordinates
+          x: event.clientX + 0,
+          y: event.clientY + 0
         }
       })
     });

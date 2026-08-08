@@ -1,5 +1,6 @@
 'use strict';
 
+
 /**
  * get JSON file as object from url
  * returns a promise which is fulfilled with the json object as a parameter
@@ -44,20 +45,6 @@ function toSingleButton (pressedButton) {
   else if (pressedButton === 4) return 1;
   else return -1;
 }
-
-
-const notificationLinks = new Map();
-
-chrome.notifications?.onClicked?.addListener((notificationId) => {
-  const link = notificationLinks.get(notificationId);
-  if (link) {
-    notificationLinks.delete(notificationId);
-    chrome.tabs.create({
-      url: link,
-      active: true
-    });
-  }
-});
 
 
 /**
@@ -246,9 +233,9 @@ class GestureContextData {
         : null,
       mouse: new MouseData({
         endpoint: {
-          // 坐标相对当前 frame 视口的 CSS 像素，手势视图 fixed 定位在同一 frame 内，无需额外转换
-          x: event.clientX,
-          y: event.clientY
+          // transform coordinates to css screen coordinates
+          x: event.clientX + 0,
+          y: event.clientY + 0
         }
       })
     });
@@ -899,6 +886,7 @@ function handlePointerdown (event) {
 
     // prevent middle click scroll
     if (mouseButton$1 === MIDDLE_MOUSE_BUTTON$1) event.preventDefault();
+  } else {
   }
 }
 
@@ -1270,31 +1258,31 @@ const MIDDLE_MOUSE_BUTTON = 4;
 
 
 var WheelGestureController = {
-  enable: enable,
-  disable: disable,
-  addEventListener: addEventListener,
-  hasEventListener: hasEventListener,
-  removeEventListener: removeEventListener,
+  enable: enable$0,
+  disable: disable$0,
+  addEventListener: addEventListener$0,
+  hasEventListener: hasEventListener$0,
+  removeEventListener: removeEventListener$0,
 
   get targetElement () {
-    return targetElement;
+    return targetElement$0;
   },
   set targetElement (value) {
-    targetElement = value;
+    targetElement$0 = value;
   },
 
   get mouseButton () {
-    return mouseButton;
+    return mouseButton$0;
   },
   set mouseButton (value) {
-    mouseButton = Number(value);
+    mouseButton$0 = Number(value);
   },
 
   get wheelSensitivity () {
-    return wheelSensitivity;
+    return wheelSensitivity$0;
   },
   set wheelSensitivity (value) {
-    wheelSensitivity = Number(value);
+    wheelSensitivity$0 = Number(value);
   }
 };
 
@@ -1302,63 +1290,63 @@ var WheelGestureController = {
 /**
  * Add callbacks to the given events
  **/
-function addEventListener (event, callback) {
+function addEventListener$0 (event, callback) {
   // if event exists add listener (duplicates won't be added)
-  if (event in events) events[event].add(callback);
+  if (event in events$0) events$0[event].add(callback);
 }
 
 /**
  * Check if an event listener is registered
  **/
-function hasEventListener (event, callback) {
+function hasEventListener$0 (event, callback) {
   // if event exists check for listener
-  if (event in events) events[event].has(callback);
+  if (event in events$0) events$0[event].has(callback);
 }
 
 /**
  * Remove callbacks from the given events
  **/
-function removeEventListener (event, callback) {
+function removeEventListener$0 (event, callback) {
   // if event exists remove listener
-  if (event in events) events[event].delete(callback);
+  if (event in events$0) events$0[event].delete(callback);
 }
 
 /**
  * Add the document event listener
  **/
-function enable () {
-  targetElement.addEventListener('wheel', handleWheel, {capture: true, passive: false});
-  targetElement.addEventListener('mousedown', handleMousedown, true);
-  targetElement.addEventListener('mouseup', handleMouseup, true);
-  targetElement.addEventListener('click', handleClick, true);
-  targetElement.addEventListener('contextmenu', handleContextmenu, true);
-  targetElement.addEventListener('visibilitychange', handleVisibilitychange, true);
+function enable$0 () {
+  targetElement$0.addEventListener('wheel', handleWheel, {capture: true, passive: false});
+  targetElement$0.addEventListener('mousedown', handleMousedown, true);
+  targetElement$0.addEventListener('mouseup', handleMouseup, true);
+  targetElement$0.addEventListener('click', handleClick, true);
+  targetElement$0.addEventListener('contextmenu', handleContextmenu, true);
+  targetElement$0.addEventListener('visibilitychange', handleVisibilitychange, true);
 }
 
 /**
  * Remove the event listeners and resets the handler
  **/
-function disable () {
+function disable$0 () {
   preventDefault = true;
-  targetElement.removeEventListener('wheel', handleWheel, {capture: true, passive: false});
-  targetElement.removeEventListener('mousedown', handleMousedown, true);
-  targetElement.removeEventListener('mouseup', handleMouseup, true);
-  targetElement.removeEventListener('click', handleClick, true);
-  targetElement.removeEventListener('contextmenu', handleContextmenu, true);
-  targetElement.removeEventListener('visibilitychange', handleVisibilitychange, true);
+  targetElement$0.removeEventListener('wheel', handleWheel, {capture: true, passive: false});
+  targetElement$0.removeEventListener('mousedown', handleMousedown, true);
+  targetElement$0.removeEventListener('mouseup', handleMouseup, true);
+  targetElement$0.removeEventListener('click', handleClick, true);
+  targetElement$0.removeEventListener('contextmenu', handleContextmenu, true);
+  targetElement$0.removeEventListener('visibilitychange', handleVisibilitychange, true);
 }
 
 // private variables and methods
 
 // holds all custom module event callbacks
-const events = {
+const events$0 = {
   'wheelup': new Set(),
   'wheeldown': new Set()
 };
 
-let targetElement = window,
-    mouseButton = LEFT_MOUSE_BUTTON,
-    wheelSensitivity = 2;
+let targetElement$0 = window,
+    mouseButton$0 = LEFT_MOUSE_BUTTON,
+    wheelSensitivity$0 = 2;
 
 // keep preventDefault true for the special case that the contextmenu or click is fired without a previous mousedown
 let preventDefault = true;
@@ -1380,7 +1368,7 @@ function handleMousedown (event) {
     accumulatedDeltaY = 0;
 
     // prevent middle click scroll
-    if (mouseButton === MIDDLE_MOUSE_BUTTON && event.buttons === MIDDLE_MOUSE_BUTTON) event.preventDefault();
+    if (mouseButton$0 === MIDDLE_MOUSE_BUTTON && event.buttons === MIDDLE_MOUSE_BUTTON) event.preventDefault();
   }
 }
 
@@ -1389,7 +1377,7 @@ function handleMousedown (event) {
  * Handles mousewheel up and down and prevents scrolling if needed
  **/
 function handleWheel (event) {
-  if (event.isTrusted && event.buttons === mouseButton && event.deltaY !== 0) {
+  if (event.isTrusted && event.buttons === mouseButton$0 && event.deltaY !== 0) {
 
     // check if the sign is different and reset the accumulated value
     if ((accumulatedDeltaY < 0) !== (event.deltaY < 0)) accumulatedDeltaY = 0;
@@ -1399,10 +1387,10 @@ function handleWheel (event) {
     if (Math.abs(accumulatedDeltaY) >= wheelSensitivity) {
       // dispatch all bound functions on wheel up/down and pass the appropriate event
       if (accumulatedDeltaY < 0) {
-        events['wheelup'].forEach((callback) => callback(event));
+        events$0['wheelup'].forEach((callback) => callback(event));
       }
       else if (accumulatedDeltaY > 0) {
-        events['wheeldown'].forEach((callback) => callback(event));
+        events$0['wheeldown'].forEach((callback) => callback(event));
       }
 
       // reset accumulated deltaY if it reaches the sensitivity value
@@ -1442,7 +1430,7 @@ function handleVisibilitychange() {
  * Handles and prevents context menu if needed
  **/
 function handleContextmenu (event) {
-  if (event.isTrusted && preventDefault && event.button === toSingleButton(mouseButton) && mouseButton === RIGHT_MOUSE_BUTTON) {
+  if (event.isTrusted && preventDefault && event.button === toSingleButton(mouseButton$0) && mouseButton$0 === RIGHT_MOUSE_BUTTON) {
     // prevent contextmenu
     event.stopPropagation();
     event.preventDefault();
@@ -1456,7 +1444,7 @@ function handleContextmenu (event) {
 function handleClick (event) {
   // event.detail because a click event can be fired without clicking (https://stackoverflow.com/questions/4763638/enter-triggers-button-click)
   // timeStamp check ensures that the click is fired by mouseup
-  if (event.isTrusted && preventDefault && event.button === toSingleButton(mouseButton) && (mouseButton === LEFT_MOUSE_BUTTON || mouseButton === MIDDLE_MOUSE_BUTTON) && event.detail && event.timeStamp === lastMouseup) {
+  if (event.isTrusted && preventDefault && event.button === toSingleButton(mouseButton$0) && (mouseButton$0 === LEFT_MOUSE_BUTTON || mouseButton$0 === MIDDLE_MOUSE_BUTTON) && event.detail && event.timeStamp === lastMouseup) {
     // prevent left and middle click
     event.stopPropagation();
     event.preventDefault();
@@ -1897,7 +1885,7 @@ let mousePositionX = 0,
     mousePositionY = 0;
 
 // setup background/command message event listener for top frame
-if (!isEmbeddedFrame()) chrome.runtime.onMessage.addListener(handleMessage$1);
+if (!isEmbeddedFrame()) chrome.runtime.onMessage.addListener(handleMessage);
 
 
 /**
@@ -1907,7 +1895,7 @@ if (!isEmbeddedFrame()) chrome.runtime.onMessage.addListener(handleMessage$1);
  * 2. wait for message from popup with list dimension and update popup size + show popup / remove opacity
  * 3. wait for popup close message
  **/
-function handleMessage$1 (message) {
+function handleMessage (message) {
   switch (message.subject) {
     case "popupRequest": return loadPopup(message.data);
 
@@ -1956,8 +1944,8 @@ async function loadPopup (data) {
     `;
 
   // calc and store correct mouse position
-  mousePositionX = data.mousePositionX;
-  mousePositionY = data.mousePositionY;
+  mousePositionX = data.mousePositionX - 0;
+  mousePositionY = data.mousePositionY - 0;
 
   // appending the element to the DOM will start loading the iframe content
   if (document.body.tagName.toUpperCase() === "FRAMESET") {
@@ -2099,211 +2087,93 @@ function _handleListenerStillAttached(event) {
 }
 
 /**
- * User Script Controller (Chrome MV3)
- * Helper to safely execute custom user scripts in the page context.
+ * User Script Controller
+ * helper to safely execute custom user scripts in the page context
+ * will hopefully one day be replaced with https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/userScripts
  **/
 
-// Register message listener for executeUserScript requests from background/extension
+//  This script is using content script specific functions like cloneInto so it should only be run as a content script (thus not in the installation page)
+if (typeof cloneInto !== "function") console.warn("User scripts are disabled on this page.");
+
+else {
+
+// add the message event listener
 chrome.runtime.onMessage.addListener(handleMessage);
 
-// Register window message listener for API bridge calls from MAIN world injected scripts
-window.addEventListener("message", handleAPIBridgeMessage);
 
 /**
  * Handles user script execution messages from the user script command
  **/
-function handleMessage(message, sender, sendResponse) {
+
+// Do not use an async method here because this would block every other message listener.
+// Instead promises are returned when appropriate.
+// See: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/Runtime/onMessage
+function handleMessage (message, sender, sendResponse) {
   if (message.subject === "executeUserScript") {
-    executeUserScript(message, sender)
-      .then((success) => sendResponse(success))
-      .catch(() => sendResponse(false));
-    return true;
+    // create function in page script scope (not content script scope)
+    // so it is not executed as privileged extension code and thus has no access to webextension apis
+    // this also prevents interference with the extension code
+    try {
+      const executeUserScript = new window.wrappedJSObject.Function("TARGET", "API", message.data);
+      const returnValue = executeUserScript(window.TARGET, API);
+      // interpret every value even undefined or 0 as true (success) and only an explicit false as failure
+      return Promise.resolve(returnValue != false);
+    }
+    // catch CSP errors that prevent the user script from running
+    // this allows to declare a fallback command via the multi purpose command
+    catch(error) {
+      return Promise.resolve(false);
+    }
   }
 }
 
+
 /**
- * Handles API call requests sent via window.postMessage from injected user scripts in MAIN world.
+ * Build API function object
  **/
-async function handleAPIBridgeMessage(event) {
-  if (
-    event.source !== window ||
-    !event.data ||
-    event.data.type !== "executeUserScriptAPICall"
-  ) {
-    return;
+const API = cloneInto({
+  tabs: {
+    query: apiFunctionCallHandler.bind(null, "tabs", "query"),
+    create: apiFunctionCallHandler.bind(null, "tabs", "create"),
+    remove: apiFunctionCallHandler.bind(null, "tabs", "remove"),
+    update: apiFunctionCallHandler.bind(null, "tabs", "update"),
+    duplicate: apiFunctionCallHandler.bind(null, "tabs", "duplicate"),
+    goBack: apiFunctionCallHandler.bind(null, "tabs", "goBack"),
+    goForward: apiFunctionCallHandler.bind(null, "tabs", "goForward"),
+    move: apiFunctionCallHandler.bind(null, "tabs", "move")
+  },
+  windows: {
+    get: apiFunctionCallHandler.bind(null, "windows", "get"),
+    getCurrent: apiFunctionCallHandler.bind(null, "windows", "getCurrent"),
+    create: apiFunctionCallHandler.bind(null, "windows", "create"),
+    remove: apiFunctionCallHandler.bind(null, "windows", "remove"),
+    update: apiFunctionCallHandler.bind(null, "windows", "update"),
   }
+}, window.wrappedJSObject, { cloneFunctions: true });
 
-  const { id, nameSpace, functionName, parameter } = event.data;
-  if (!id || !nameSpace || !functionName) return;
 
-  try {
-    const result = await chrome.runtime.sendMessage({
+/**
+ * Forwards function calls to the background script and returns their values
+ **/
+function apiFunctionCallHandler (nameSpace, functionName, ...args) {
+  return new window.Promise((resolve, reject) => {
+    const value = chrome.runtime.sendMessage({
       subject: "backgroundScriptAPICall",
       data: {
-        nameSpace,
-        functionName,
-        parameter
+        "nameSpace": nameSpace,
+        "functionName": functionName,
+        "parameter": args
       }
     });
-    window.postMessage(
-      {
-        type: "executeUserScriptAPIResponse",
-        id,
-        result
-      },
-      "*"
-    );
-  } catch (error) {
-    window.postMessage(
-      {
-        type: "executeUserScriptAPIResponse",
-        id,
-        error: error?.message || String(error)
-      },
-      "*"
-    );
-  }
-}
-
-/**
- * Injects user script into target tab/frame's MAIN world via chrome.scripting.executeScript.
- **/
-async function executeUserScript(message, sender) {
-  try {
-    const userScriptCode = message.data;
-    if (typeof userScriptCode !== "string") {
-      return false;
-    }
-
-    const clientX = message.clientX ?? message.x ?? message.endpoint?.x;
-    const clientY = message.clientY ?? message.y ?? message.endpoint?.y;
-
-    let tabId = message.tabId ?? sender?.tab?.id;
-    let frameId = message.frameId;
-
-    if (!tabId || frameId === undefined || frameId === null) {
-      try {
-        const contextInfo = await chrome.runtime.sendMessage({ subject: "getExtensionContextInfo" });
-        if (contextInfo) {
-          if (!tabId) tabId = contextInfo.tabId;
-          if (frameId === undefined || frameId === null) frameId = contextInfo.frameId;
-        }
-      } catch (e) {}
-    }
-
-    if (!tabId) return false;
-
-    frameId = frameId ?? 0;
-
-    const target = {
-      tabId,
-      frameIds: [frameId]
-    };
-
-    const options = {
-      target,
-      world: "MAIN",
-      func: runUserScriptInMainWorld,
-      args: [userScriptCode, clientX, clientY]
-    };
-
-    let results;
-    if (typeof chrome.scripting?.executeScript === "function") {
-      results = await chrome.scripting.executeScript(options);
-    } else {
-      results = await chrome.runtime.sendMessage({
-        subject: "backgroundScriptAPICall",
-        data: {
-          nameSpace: "scripting",
-          functionName: "executeScript",
-          parameter: [options]
-        }
-      });
-    }
-
-    if (Array.isArray(results) && results.length > 0) {
-      return results[0]?.result !== false;
-    }
-    return false;
-  } catch (error) {
-    return false;
-  }
-}
-
-/**
- * Executed inside the MAIN world (page context).
- * Self-contained function serialized by chrome.scripting.executeScript.
- **/
-async function runUserScriptInMainWorld(userScriptCode, clientX, clientY) {
-  let TARGET = null;
-  if (typeof clientX === "number" && typeof clientY === "number") {
-    try {
-      TARGET = document.elementFromPoint(clientX, clientY);
-    } catch (e) {
-      TARGET = null;
-    }
-  }
-
-  function apiCall(nameSpace, functionName, parameter) {
-    return new Promise((resolve, reject) => {
-      const id = Math.random().toString(36).slice(2) + Date.now().toString(36);
-      function handleResponse(event) {
-        if (
-          event.source === window &&
-          event.data &&
-          event.data.type === "executeUserScriptAPIResponse" &&
-          event.data.id === id
-        ) {
-          window.removeEventListener("message", handleResponse);
-          if (event.data.error) {
-            reject(new Error(event.data.error));
-          } else {
-            resolve(event.data.result);
-          }
-        }
-      }
-      window.addEventListener("message", handleResponse);
-      window.postMessage(
-        {
-          type: "executeUserScriptAPICall",
-          id,
-          nameSpace,
-          functionName,
-          parameter
-        },
-        "*"
-      );
+    value.then((value) => {
+      resolve(cloneInto(value, window.wrappedJSObject));
     });
-  }
+    value.catch((reason) => {
+      reject(reason);
+    });
+  });
+}
 
-  const API = {
-    tabs: {
-      query: (...args) => apiCall("tabs", "query", args),
-      create: (...args) => apiCall("tabs", "create", args),
-      remove: (...args) => apiCall("tabs", "remove", args),
-      update: (...args) => apiCall("tabs", "update", args),
-      duplicate: (...args) => apiCall("tabs", "duplicate", args),
-      goBack: (...args) => apiCall("tabs", "goBack", args),
-      goForward: (...args) => apiCall("tabs", "goForward", args),
-      move: (...args) => apiCall("tabs", "move", args)
-    },
-    windows: {
-      get: (...args) => apiCall("windows", "get", args),
-      getCurrent: (...args) => apiCall("windows", "getCurrent", args),
-      create: (...args) => apiCall("windows", "create", args),
-      remove: (...args) => apiCall("windows", "remove", args),
-      update: (...args) => apiCall("windows", "update", args)
-    }
-  };
-
-  try {
-    const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
-    const executeUserScript = new AsyncFunction("TARGET", "API", userScriptCode);
-    const result = await executeUserScript(TARGET, API);
-    return result !== false;
-  } catch (error) {
-    return false;
-  }
 }
 
 // global variable containing the hierarchy of target html elements for scripts injected by commands
@@ -2319,7 +2189,11 @@ const IS_EMBEDDED_FRAME = isEmbeddedFrame();
 
 const Config = new ConfigManager("local", chrome.runtime.getURL("resources/json/defaults.json"));
       Config.autoUpdate = true;
-      Config.loaded.then(main);
+      Config.loaded.then(() => {
+        main();
+      }).catch((error) => {
+        main();
+      });
       Config.addEventListener("change", main);
 
 // re-run main function if event listeners got removed
@@ -2363,9 +2237,8 @@ MouseGestureController.addEventListener("start", (event, events) => {
       chrome.runtime.sendMessage({
         subject: "mouseGestureViewInitialize",
         data: {
-          // 坐标为相对当前 frame 视口的 CSS 像素，手势视图 fixed 定位在同一 frame 内，无需额外转换
-          x: event.clientX,
-          y: event.clientY
+          x: event.clientX + 0,
+          y: event.clientY + 0
         }
       });
     }
@@ -2412,9 +2285,10 @@ function mouseGestureUpdate(coalescedEvents) {
       MouseGestureView.updateGestureTrace(points);
     }
     else {
+      // map points to global screen wide coordinates
       const points = coalescedEvents.map(event => ({
-        x: event.clientX,
-        y: event.clientY
+        x: event.clientX + 0,
+        y: event.clientY + 0
       }));
       chrome.runtime.sendMessage({
         subject: "mouseGestureViewUpdateGestureTrace",
@@ -2458,8 +2332,9 @@ MouseGestureController.addEventListener("end", (event, events) => {
   // set last mouse event as endpoint
   gestureContextData.mouse = new MouseData({
     endpoint: {
-      x: event.clientX,
-      y: event.clientY
+      // transform coordinates to css screen coordinates
+      x: event.clientX + 0,
+      y: event.clientY + 0
     }
   });
 
@@ -2484,13 +2359,19 @@ if (!IS_EMBEDDED_FRAME) {
   chrome.runtime.onMessage.addListener((message) => {
     switch (message.subject) {
       case "mouseGestureViewInitialize":
+        // remap points to client wide css coordinates
         MouseGestureView.initialize(
-          message.data.x,
-          message.data.y
+          message.data.x - 0,
+          message.data.y - 0
         );
       break;
 
       case "mouseGestureViewUpdateGestureTrace":
+        // remap points to client wide css coordinates
+        message.data.points.forEach(point => {
+          point.x -= 0;
+          point.y -= 0;
+        });
         MouseGestureView.updateGestureTrace(message.data.points);
       break;
 
@@ -2530,25 +2411,6 @@ function handleRockerAndWheelEvents (subject, event) {
     data: data
   });
 }
-
-
-// define double click to close tab event listener
-let lastDoubleClickTime = 0;
-
-document.addEventListener("dblclick", (event) => {
-  if (!Config.get("Settings.Gesture.doubleClickCloseTab")) return;
-  if (Config.get("Exclusions")?.some(matchesCurrentURL)) return;
-
-  const now = Date.now();
-  if (now - lastDoubleClickTime < 300) return;
-  lastDoubleClickTime = now;
-
-  const target = event.composedPath?.()[0] ?? event.target;
-  const element = target instanceof Element ? target : target?.parentElement;
-  if (element?.closest("input, textarea, select, button, a, iframe, video, audio, [contenteditable]")) return;
-
-  chrome.runtime.sendMessage({ subject: "closeTabByDoubleClick" });
-});
 
 
 /**

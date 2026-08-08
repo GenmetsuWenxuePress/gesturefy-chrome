@@ -91,8 +91,8 @@ async function loadPopup (data) {
     `;
 
   // calc and store correct mouse position
-  mousePositionX = data.mousePositionX;
-  mousePositionY = data.mousePositionY;
+  mousePositionX = data.mousePositionX - 0;
+  mousePositionY = data.mousePositionY - 0;
 
   // appending the element to the DOM will start loading the iframe content
   if (document.body.tagName.toUpperCase() === "FRAMESET") {

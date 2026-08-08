@@ -6,9 +6,11 @@
     <span data-manifest="name"></span>, Version: <span data-manifest="version"></span>
   </strong>
 </p>
-<p class="justify-text" style="color: #e74c3c; font-weight: bold; padding: 10px; background-color: #fce4e4; border-radius: 4px;">
-  特别说明：这个扩展是基于源码使用AI创建的Chrome版，存在部分命令无法执行等bug。
-</p>
+<div style="padding: 12px; background-color: #e3f2fd; border-left: 4px solid #1976d2; border-radius: 4px; margin-bottom: 12px;">
+  <p style="margin: 0 0 6px 0; font-weight: bold; color: #0d47a1;" data-i18n="aboutTributeTitle"></p>
+  <p style="margin: 0 0 6px 0; color: #1565c0;" data-i18n="aboutTributeBody"></p>
+  <a target="_blank" href="https://github.com/GenmetsuWenxuePress/gesturefy-chrome" style="color: #0d47a1;" data-i18n="aboutTributeLink"></a>
+</div>
 <p class="justify-text">
   <strong data-i18n="aboutLicense"></strong>
   GNU GPLv3

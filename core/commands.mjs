@@ -8,45 +8,6 @@ import {
   displayNotification
 } from "/core/utils/commons.mjs";
 
-async function getTabId (sender) {
-  if (sender?.tab?.id) {
-    return sender.tab.id;
-  }
-  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-  return tab?.id;
-}
-
-async function readClipboard (sender) {
-  try {
-    const tabId = await getTabId(sender);
-    if (!tabId) return null;
-    const results = await chrome.scripting.executeScript({
-      target: { tabId },
-      func: () => navigator.clipboard.readText()
-    });
-    return results[0]?.result ?? null;
-  }
-  catch (error) {
-    return null;
-  }
-}
-
-async function writeClipboard (sender, text) {
-  try {
-    const tabId = await getTabId(sender);
-    if (!tabId) return false;
-    await chrome.scripting.executeScript({
-      target: { tabId },
-      func: (content) => navigator.clipboard.writeText(content),
-      args: [text]
-    });
-    return true;
-  }
-  catch (error) {
-    return false;
-  }
-}
-
 /*
  * Commands
  * Every command fulfills its promise when its internal processes finish
@@ -1307,9 +1268,9 @@ export async function SearchTextSelectionInNewTab (sender, data) {
 
 
 export async function SearchClipboard (sender, data) {
-  const clipboardText = await readClipboard(sender);
+  const clipboardText = await navigator.clipboard.readText();
 
-  if (clipboardText === null || (clipboardText.trim() === "" && this.getSetting("openEmptySearch") === false)) {
+  if (clipboardText.trim() === "" && this.getSetting("openEmptySearch") === false) {
     return;
   }
 
@@ -1340,9 +1301,9 @@ export async function SearchClipboard (sender, data) {
 
 
 export async function SearchClipboardInNewTab (sender, data) {
-  const clipboardText = await readClipboard(sender);
+  const clipboardText = await navigator.clipboard.readText();
 
-  if (clipboardText === null || (clipboardText.trim() === "" && this.getSetting("openEmptySearch") === false)) {
+  if (clipboardText.trim() === "" && this.getSetting("openEmptySearch") === false) {
     return;
   }
 
@@ -1594,8 +1555,7 @@ export async function ViewImage (sender, data) {
 
 
 export async function OpenURLFromClipboard (sender, data) {
-  const clipboardText = await readClipboard(sender);
-  if (clipboardText === null) return;
+  const clipboardText = await navigator.clipboard.readText();
 
   let url = null;
   // check if the provided url can be opened by webextensions (is not privileged)
@@ -1614,8 +1574,7 @@ export async function OpenURLFromClipboard (sender, data) {
 
 
 export async function OpenURLFromClipboardInNewTab (sender, data) {
-  const clipboardText = await readClipboard(sender);
-  if (clipboardText === null) return;
+  const clipboardText = await navigator.clipboard.readText();
 
   let url = null;
   // check if the provided url can be opened by webextensions (is not privileged)
@@ -1656,8 +1615,7 @@ export async function OpenURLFromClipboardInNewTab (sender, data) {
 
 
 export async function OpenURLFromClipboardInNewWindow (sender, data) {
-  const clipboardText = await readClipboard(sender);
-  if (clipboardText === null) return;
+  const clipboardText = await navigator.clipboard.readText();
 
   let url = null;
   // check if the provided url can be opened by webextensions (is not privileged)
@@ -1676,8 +1634,7 @@ export async function OpenURLFromClipboardInNewWindow (sender, data) {
 
 
 export async function OpenURLFromClipboardInNewPrivateWindow (sender, data) {
-  const clipboardText = await readClipboard(sender);
-  if (clipboardText === null) return;
+  const clipboardText = await navigator.clipboard.readText();
 
   let url = null;
   // check if the provided url can be opened by webextensions (is not privileged)
@@ -1706,19 +1663,12 @@ export async function OpenURLFromClipboardInNewPrivateWindow (sender, data) {
 
 
 export async function PasteClipboard (sender, data) {
-  try {
-    const tabId = await getTabId(sender);
-    if (!tabId) return;
-    await chrome.scripting.executeScript({
-      target: { tabId, frameIds: [sender.frameId ?? 0] },
-      func: () => document.execCommand("paste")
-    });
-    // confirm success
-    return true;
-  }
-  catch (error) {
-    return;
-  }
+  await chrome.scripting.executeScript({
+    target: { tabId: sender.tab.id, frameIds: [sender.frameId ?? 0] },
+    func: () => document.execCommand("paste")
+  });
+  // confirm success
+  return true;
 }
 
 
@@ -1793,18 +1743,9 @@ export async function SaveScreenshot (sender, data) {
 }
 
 export async function CopyTabURL (sender, data) {
-  let url = sender?.tab?.url;
-  if (!url) {
-    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-    url = tab?.url;
-  }
-  if (url) {
-    const success = await writeClipboard(sender, url);
-    if (success) {
-      // confirm success
-      return true;
-    }
-  }
+  await navigator.clipboard.writeText(sender.tab.url);
+  // confirm success
+  return true;
 }
 
 
@@ -1815,33 +1756,27 @@ export async function CopyLinkURL (sender, data) {
   else if (data.link && data.link.href) url = data.link.href;
 
   if (url) {
-    const success = await writeClipboard(sender, url);
-    if (success) {
-      // confirm success
-      return true;
-    }
+    await navigator.clipboard.writeText(url);
+    // confirm success
+    return true;
   }
 }
 
 
 export async function CopyImageURL (sender, data) {
   if (data.target.nodeName.toLowerCase() === "img" && data.target.src) {
-    const success = await writeClipboard(sender, data.target.src);
-    if (success) {
-      // confirm success
-      return true;
-    }
+    await navigator.clipboard.writeText(data.target.src);
+    // confirm success
+    return true;
   }
 }
 
 
 export async function CopyTextSelection (sender, data) {
   if (data.selection.text) {
-    const success = await writeClipboard(sender, data.selection.text);
-    if (success) {
-      // confirm success
-      return true;
-    }
+    await navigator.clipboard.writeText(data.selection.text);
+    // confirm success
+    return true;
   }
 }
 
@@ -2245,11 +2180,7 @@ export async function ExecuteUserScript (sender, data) {
     sender.tab.id,
     {
       subject: "executeUserScript",
-      data: this.getSetting("userScript"),
-      tabId: sender.tab.id,
-      frameId: messageOptions.frameId,
-      clientX: data?.mouse?.endpoint?.x,
-      clientY: data?.mouse?.endpoint?.y
+      data: this.getSetting("userScript")
     },
     messageOptions
   );

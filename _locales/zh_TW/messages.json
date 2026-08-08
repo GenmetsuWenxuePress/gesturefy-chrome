@@ -1682,11 +1682,11 @@
     "description": "Learn More"
   },
   "commandLabelSaveMedia": {
-    "message": "儲存媒體",
+    "message": "保存影音",
     "description": "Save media"
   },
   "commandDescriptionSaveMedia": {
-    "message": "下載手勢起點上的影片或音訊元素。",
+    "message": "下載手勢起始點的影片或音訊元素。",
     "description": "Downloads the video or audio element on which the gesture started."
   },
   "settingLabelDoubleClickCloseTab": {
@@ -1694,19 +1694,19 @@
     "description": "Double click to close tab"
   },
   "settingDescriptionDoubleClickCloseTab": {
-    "message": "在頁面空白處雙擊滑鼠關閉目前分頁。",
-    "description": "Double click on empty area to close the current tab."
+    "message": "在網頁空白處雙擊左鍵關閉當前分頁。",
+    "description": "Double click left mouse button on page to close current tab."
   },
   "settingLabelPresets": {
     "message": "手勢預設",
     "description": "Gesture presets"
   },
   "settingDescriptionPresets": {
-    "message": "選擇並套用預設的手勢設定。",
-    "description": "Select and apply a preset gesture configuration."
+    "message": "選擇預設的手勢方案，應用後將替換當前手勢列表。",
+    "description": "Select a preset gesture configuration, applying will replace the current gestures."
   },
   "presetApplyButton": {
-    "message": "套用預設",
+    "message": "應用預設",
     "description": "Apply preset"
   },
   "presetGesturefy": {
@@ -1714,11 +1714,20 @@
     "description": "Gesturefy default"
   },
   "presetEdge": {
-    "message": "微軟 Edge 風格",
-    "description": "Microsoft Edge style"
+    "message": "Edge 風格",
+    "description": "Edge style"
   },
   "presetQihu360": {
-    "message": "360 安全瀏覽器風格",
-    "description": "360 Safe Browser style"
+    "message": "360 極速瀏覽器風格",
+    "description": "360 Browser style"
+  },
+  "aboutTributeTitle": {
+    "message": "向原作者致敬"
+  },
+  "aboutTributeBody": {
+    "message": "本擴充套件是 Gesturefy（GPL-3.0，原作者 Robbendebiene）的 Chrome 移植版。Gesturefy 是 Firefox 上備受喜愛的滑鼠手勢擴充套件，感謝原作者的卓越工作。本移植版保留了原作者的版權聲明與 GPL-3.0 授權，不收集任何資料。"
+  },
+  "aboutTributeLink": {
+    "message": "檢視本移植版原始碼（GitHub）"
   }
 }

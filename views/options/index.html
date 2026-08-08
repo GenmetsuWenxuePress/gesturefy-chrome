@@ -13,7 +13,6 @@
   <script src="/views/options/components/color-picker/main.mjs" type="module"></script>
 
   <script src="/views/options/main.mjs" type="module"></script>
-  <script src="/views/options/settings.mjs" type="module"></script>
   <script src="/views/options/gestures.mjs" type="module"></script>
   <script src="/views/options/exclusions.mjs" type="module"></script>
   <script src="/views/options/data-management.mjs" type="module"></script>
@@ -64,7 +63,32 @@
 
   <div id="Content">
     <div class="content" data-include="/views/options/fragments/gestures.inc" id="Gestures"></div>
-    <div class="content" data-include="/views/options/fragments/settings.inc" id="Settings"></div>
+    <div class="content" data-include="/views/options/fragments/settings.inc" id="Settings">
+      <div id="gestureCustomSettings">
+        <div class="ol-item">
+          <div class="ol-label">
+            <label class="checkbox"><input type="checkbox" data-config="Settings.Gesture.doubleClickCloseTab"><span data-i18n="settingLabelDoubleClickCloseTab"></span></label>
+            <p data-i18n="settingDescriptionDoubleClickCloseTab" class="ol-description"></p>
+          </div>
+        </div>
+        <div class="ol-item">
+          <div class="ol-label">
+            <p data-i18n="settingLabelPresets" class="ol-name"></p>
+            <p data-i18n="settingDescriptionPresets" class="ol-description"></p>
+          </div>
+          <div class="ol-input">
+            <div class="select-wrapper">
+              <select id="presetSelect" class="select-field">
+                <option value="gesturefy" data-i18n="presetGesturefy"></option>
+                <option value="edge" data-i18n="presetEdge"></option>
+                <option value="qihu360" data-i18n="presetQihu360"></option>
+              </select>
+            </div>
+            <button id="presetApplyButton" class="button" type="button" data-i18n="presetApplyButton"></button>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="content" data-include="/views/options/fragments/extras.inc" id="Extras"></div>
     <div class="content" data-include="/views/options/fragments/exclusions.inc" id="Exclusions"></div>
     <div class="content" data-include="/views/options/fragments/about.inc" id="About"></div>

@@ -24,6 +24,15 @@ ContentLoaded.then(main);
  * run code that depends on async resources
  **/
 function main () {
+  const customSettings = document.getElementById("gestureCustomSettings");
+  const firstSection = document.querySelector("#Settings .ol-section");
+  if (customSettings && firstSection) {
+    while (customSettings.firstElementChild) {
+      firstSection.appendChild(customSettings.firstElementChild);
+    }
+    customSettings.remove();
+  }
+
   // insert text from manifest
   const manifest = chrome.runtime.getManifest();
   for (const element of document.querySelectorAll('[data-manifest]')) {
@@ -46,6 +55,25 @@ function main () {
     }
     else input.value = value;
     input.addEventListener('change', onChage);
+  }
+
+  // preset apply handler
+  const presetApplyButton = document.getElementById("presetApplyButton");
+  const presetSelect = document.getElementById("presetSelect");
+  let resetTimeout = null;
+  if (presetApplyButton && presetSelect) {
+    presetApplyButton.addEventListener("click", async () => {
+      const presets = Config.get("GesturePresets");
+      const key = presetSelect.value;
+      if (presets && presets[key]) {
+        await Config.set("Gestures", presets[key]);
+        if (resetTimeout) clearTimeout(resetTimeout);
+        presetApplyButton.textContent = "✓";
+        resetTimeout = setTimeout(() => {
+          presetApplyButton.textContent = chrome.i18n.getMessage("presetApplyButton");
+        }, 1000);
+      }
+    });
   }
 
   // toggle collapsables and add their event function

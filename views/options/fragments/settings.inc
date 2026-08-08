@@ -36,31 +36,6 @@
     </div>
     <div class="ol-item">
       <div class="ol-label">
-        <p data-i18n="settingLabelPresets" class="ol-name"></p>
-        <p data-i18n="settingDescriptionPresets" class="ol-description"></p>
-      </div>
-      <div class="ol-input">
-        <div class="select-wrapper">
-          <select id="presetSelect" class="select-field">
-            <option value="gesturefy" data-i18n="presetGesturefy"></option>
-            <option value="edge" data-i18n="presetEdge"></option>
-            <option value="qihu360" data-i18n="presetQihu360"></option>
-          </select>
-        </div>
-        <button id="presetApplyButton" class="button" data-i18n="presetApplyButton" type="button"></button>
-      </div>
-    </div>
-    <div class="ol-item">
-      <div class="ol-label">
-        <p data-i18n="settingLabelDoubleClickCloseTab" class="ol-name"></p>
-        <p data-i18n="settingDescriptionDoubleClickCloseTab" class="ol-description"></p>
-      </div>
-      <div class="ol-input">
-        <input data-config="Settings.Gesture.doubleClickCloseTab" class="toggle-button" type="checkbox">
-      </div>
-    </div>
-    <div class="ol-item">
-      <div class="ol-label">
         <p data-i18n="settingLabelTimeoutActive" class="ol-name"></p>
         <p data-i18n="settingDescriptionTimeoutActive" class="ol-description"></p>
       </div>

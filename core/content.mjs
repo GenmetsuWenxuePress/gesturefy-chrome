@@ -78,9 +78,8 @@ MouseGestureController.addEventListener("start", (event, events) => {
       chrome.runtime.sendMessage({
         subject: "mouseGestureViewInitialize",
         data: {
-          // 坐标为相对当前 frame 视口的 CSS 像素，手势视图 fixed 定位在同一 frame 内，无需额外转换
-          x: event.clientX,
-          y: event.clientY
+          x: event.clientX + 0,
+          y: event.clientY + 0
         }
       });
     }
@@ -127,9 +126,10 @@ function mouseGestureUpdate(coalescedEvents) {
       MouseGestureView.updateGestureTrace(points);
     }
     else {
+      // map points to global screen wide coordinates
       const points = coalescedEvents.map(event => ({
-        x: event.clientX,
-        y: event.clientY
+        x: event.clientX + 0,
+        y: event.clientY + 0
       }));
       chrome.runtime.sendMessage({
         subject: "mouseGestureViewUpdateGestureTrace",
@@ -173,8 +173,9 @@ MouseGestureController.addEventListener("end", (event, events) => {
   // set last mouse event as endpoint
   gestureContextData.mouse = new MouseData({
     endpoint: {
-      x: event.clientX,
-      y: event.clientY
+      // transform coordinates to css screen coordinates
+      x: event.clientX + 0,
+      y: event.clientY + 0
     }
   });
 
@@ -199,13 +200,19 @@ if (!IS_EMBEDDED_FRAME) {
   chrome.runtime.onMessage.addListener((message) => {
     switch (message.subject) {
       case "mouseGestureViewInitialize":
+        // remap points to client wide css coordinates
         MouseGestureView.initialize(
-          message.data.x,
-          message.data.y
+          message.data.x - 0,
+          message.data.y - 0
         );
       break;
 
       case "mouseGestureViewUpdateGestureTrace":
+        // remap points to client wide css coordinates
+        message.data.points.forEach(point => {
+          point.x -= 0;
+          point.y -= 0;
+        });
         MouseGestureView.updateGestureTrace(message.data.points);
       break;
 
@@ -245,25 +252,6 @@ function handleRockerAndWheelEvents (subject, event) {
     data: data
   });
 }
-
-
-// define double click to close tab event listener
-let lastDoubleClickTime = 0;
-
-document.addEventListener("dblclick", (event) => {
-  if (!Config.get("Settings.Gesture.doubleClickCloseTab")) return;
-  if (Config.get("Exclusions")?.some(matchesCurrentURL)) return;
-
-  const now = Date.now();
-  if (now - lastDoubleClickTime < 300) return;
-  lastDoubleClickTime = now;
-
-  const target = event.composedPath?.()[0] ?? event.target;
-  const element = target instanceof Element ? target : target?.parentElement;
-  if (element?.closest("input, textarea, select, button, a, iframe, video, audio, [contenteditable]")) return;
-
-  chrome.runtime.sendMessage({ subject: "closeTabByDoubleClick" });
-});
 
 
 /**
